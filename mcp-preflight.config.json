@@ -1,0 +1,32 @@
+{
+  "target": {
+    "type": "manifest",
+    "path": "fixtures/example-manifest.json"
+  },
+  "suites": [
+    "manifest",
+    "prompt-injection",
+    "tool-combinations",
+    "implementation"
+  ],
+  "runtime": {
+    "requestTimeoutMs": 10000,
+    "toolProbes": []
+  },
+  "implementation": {
+    "paths": [],
+    "exclude": [
+      "node_modules",
+      "dist",
+      ".git",
+      "coverage"
+    ]
+  },
+  "output": {
+    "json": "reports/mcp-preflight-report.json",
+    "markdown": "reports/mcp-preflight-report.md"
+  },
+  "ci": {
+    "failOn": "high"
+  }
+}
