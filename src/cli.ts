@@ -23,7 +23,7 @@ program
   .option("--json <path>", "write structured JSON report")
   .option("--markdown <path>", "write Markdown report")
   .addOption(new Option("--fail-on <severity>", "CI failure threshold").choices([...severities, "none"]).default(undefined))
-  .option("--suite <suite...>", "override suites: manifest prompt-injection tool-combinations implementation")
+  .option("--suite <suite...>", "override suites: manifest prompt-injection tool-combinations implementation client-harness")
   .action(async (options: {
     config: string;
     json?: string;

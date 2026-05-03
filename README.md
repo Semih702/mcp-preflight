@@ -144,13 +144,25 @@ Structured JSON rapor su alanlari icerir:
 
 Her finding severity, suite, evidence, location, tags ve recommendation tasir. Bu model GitHub Actions, GitLab CI veya baska bir policy gate tarafindan parse edilebilir.
 
-## Gelecek: MCP Client Versiyonu
+## MCP Client Harness
 
-Ayni cekirdege daha sonra `client-harness` modu eklenebilir. Orada hedef bir MCP client/agent olur, test server'i ise malicious MCP server gibi davranir:
+Ayni cekirdek `client-harness` modu ile MCP client/agent davranisini da raporlayabilir. Bu modda senaryo dosyasi malicious MCP server metadata'sini ve client calismasindan toplanan gozlemleri tasir:
 
 - Zehirli tool description ve resource content sunar
 - Client'in gereksiz tool cagirip cagirmadigini olcer
 - Secret ve workspace data'sini disari tasiyip tasimadigini kontrol eder
 - Approval, sandbox ve data-boundary davranislarini raporlar
 
-Bu repo o yuzden suite, adapter ve reporter katmanlarini ayri tutuyor.
+Ornek:
+
+```bash
+npm run build
+node dist/cli.js run --config mcp-preflight.client-harness.config.json --fail-on none
+```
+
+Bu config `fixtures/client-harness-scenario.json` dosyasini kullanir ve `prompt-injection` ile `client-harness` suite'lerini calistirir. Senaryo formati iki ana bolumden olusur:
+
+- `maliciousServer`: client'a sunulan zehirli MCP server metadata'si
+- `observations`: client'in tool call, approval, sandbox ve data-boundary davranislari
+
+Bu yapi suite, adapter ve reporter katmanlari ayrildigi icin mevcut manifest/server testleriyle ayni rapor modelini kullanir.
