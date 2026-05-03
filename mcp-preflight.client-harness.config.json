@@ -1,0 +1,30 @@
+{
+  "target": {
+    "type": "client-harness",
+    "path": "fixtures/client-harness-scenario.json"
+  },
+  "suites": [
+    "prompt-injection",
+    "client-harness"
+  ],
+  "runtime": {
+    "requestTimeoutMs": 10000,
+    "toolProbes": []
+  },
+  "implementation": {
+    "paths": [],
+    "exclude": [
+      "node_modules",
+      "dist",
+      ".git",
+      "coverage"
+    ]
+  },
+  "output": {
+    "json": "reports/mcp-client-harness-report.json",
+    "markdown": "reports/mcp-client-harness-report.md"
+  },
+  "ci": {
+    "failOn": "high"
+  }
+}

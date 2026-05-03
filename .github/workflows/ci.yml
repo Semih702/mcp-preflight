@@ -18,6 +18,8 @@ jobs:
       - run: npm test
       - name: Example security report
         run: node dist/cli.js run --config mcp-preflight.config.json --fail-on none
+      - name: Client harness security report
+        run: node dist/cli.js run --config mcp-preflight.client-harness.config.json --fail-on none
       - uses: actions/upload-artifact@v4
         if: always()
         with:

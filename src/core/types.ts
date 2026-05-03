@@ -13,7 +13,8 @@ export const suiteNames = [
   "manifest",
   "prompt-injection",
   "tool-combinations",
-  "implementation"
+  "implementation",
+  "client-harness"
 ] as const;
 
 export type SuiteName = (typeof suiteNames)[number];
@@ -87,6 +88,7 @@ export interface TargetSnapshot {
   resources: McpResourceInfo[];
   resourceTemplates: McpResourceInfo[];
   prompts: McpPromptInfo[];
+  clientHarness?: ClientHarnessSnapshot;
   raw?: unknown;
 }
 
@@ -120,6 +122,11 @@ export interface ManifestTargetConfig {
   path: string;
 }
 
+export interface ClientHarnessTargetConfig {
+  type: "client-harness";
+  path: string;
+}
+
 export interface StdioTargetConfig {
   type: "stdio";
   command: string;
@@ -128,7 +135,34 @@ export interface StdioTargetConfig {
   env: Record<string, string>;
 }
 
-export type TargetConfig = ManifestTargetConfig | StdioTargetConfig;
+export interface ClientHarnessSnapshot {
+  client?: {
+    name?: string;
+    version?: string;
+  };
+  observations: ClientHarnessObservation[];
+}
+
+export interface ClientHarnessObservation {
+  type: "tool_call" | "approval" | "sandbox" | "data_boundary";
+  toolName?: string;
+  action?: string;
+  reason?: string;
+  arguments?: JsonObject;
+  approved?: boolean;
+  approvalRequired?: boolean;
+  blocked?: boolean;
+  unnecessary?: boolean;
+  exfiltrates?: boolean;
+  dataBoundaryCrossed?: boolean;
+  destination?: string;
+  path?: string;
+  boundary?: string;
+  dataClasses?: string[];
+  evidence?: string;
+}
+
+export type TargetConfig = ManifestTargetConfig | StdioTargetConfig | ClientHarnessTargetConfig;
 
 export interface AppConfig {
   target: TargetConfig;
