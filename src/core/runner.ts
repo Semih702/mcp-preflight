@@ -25,8 +25,8 @@ export async function runHarness(config: AppConfig): Promise<Report> {
       generatedAt: new Date().toISOString(),
       target: {
         type: config.target.type,
-        name: snapshot.server?.name,
-        version: snapshot.server?.version
+        name: targetName(config, snapshot),
+        version: targetVersion(config, snapshot)
       },
       suites: selectedSuites.map((suite) => suite.name),
       summary: summarize(findings, config.ci.failOn),
@@ -35,6 +35,18 @@ export async function runHarness(config: AppConfig): Promise<Report> {
   } finally {
     await target.close?.();
   }
+}
+
+function targetName(config: AppConfig, snapshot: TargetSnapshot): string | undefined {
+  return config.target.type === "client-harness"
+    ? snapshot.clientHarness?.client?.name
+    : snapshot.server?.name;
+}
+
+function targetVersion(config: AppConfig, snapshot: TargetSnapshot): string | undefined {
+  return config.target.type === "client-harness"
+    ? snapshot.clientHarness?.client?.version
+    : snapshot.server?.version;
 }
 
 async function runSuite(

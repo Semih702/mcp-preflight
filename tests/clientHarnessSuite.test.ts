@@ -43,6 +43,19 @@ describe("client harness suite", () => {
               dataBoundaryCrossed: true,
               destination: "model-context",
               dataClasses: ["secret"]
+            },
+            {
+              type: "approval",
+              action: "inspect_plan",
+              unnecessary: true,
+              approvalRequired: true,
+              approved: false
+            },
+            {
+              type: "sandbox",
+              action: "read_file",
+              blocked: false,
+              path: "notes..txt"
             }
           ]
         }
@@ -61,5 +74,7 @@ describe("client harness suite", () => {
     expect(findings.some((finding) => finding.id.includes("approval-bypass"))).toBe(true);
     expect(findings.some((finding) => finding.id.includes("sandbox-boundary"))).toBe(true);
     expect(findings.some((finding) => finding.id.includes("data-boundary"))).toBe(true);
+    expect(findings.some((finding) => finding.id.includes("unnecessary-tool-call.inspect-plan"))).toBe(false);
+    expect(findings.some((finding) => finding.id.includes("sandbox-boundary.read-file.4"))).toBe(false);
   });
 });
