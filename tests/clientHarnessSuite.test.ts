@@ -41,6 +41,7 @@ describe("client harness suite", () => {
               type: "data_boundary",
               action: "summarize_resource",
               dataBoundaryCrossed: true,
+              destination: "model-context",
               dataClasses: ["secret"]
             }
           ]
@@ -56,7 +57,7 @@ describe("client harness suite", () => {
 
     const findings = await clientHarnessSuite.run(context);
 
-    expect(findings.some((finding) => finding.id.includes("secret-exfiltration"))).toBe(true);
+    expect(findings.filter((finding) => finding.id.includes("secret-exfiltration"))).toHaveLength(1);
     expect(findings.some((finding) => finding.id.includes("approval-bypass"))).toBe(true);
     expect(findings.some((finding) => finding.id.includes("sandbox-boundary"))).toBe(true);
     expect(findings.some((finding) => finding.id.includes("data-boundary"))).toBe(true);

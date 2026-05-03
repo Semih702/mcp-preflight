@@ -124,7 +124,19 @@ function inspectObservation(observation: ClientHarnessObservation, index: number
 
 function sendsSensitiveData(observation: ClientHarnessObservation): boolean {
   const sensitive = observation.dataClasses?.some((item) => ["secret", "credential", "workspace", "user-data"].includes(item));
-  return Boolean(sensitive && observation.destination);
+  return Boolean(sensitive && isExternalDestination(observation.destination));
+}
+
+function isExternalDestination(destination: string | undefined): boolean {
+  if (!destination) {
+    return false;
+  }
+
+  if (/^https?:\/\//i.test(destination)) {
+    return true;
+  }
+
+  return ["webhook", "network", "external-service", "third-party"].includes(destination);
 }
 
 function isBoundaryEscape(observation: ClientHarnessObservation): boolean {

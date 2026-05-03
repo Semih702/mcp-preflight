@@ -52,7 +52,10 @@ function normalizeServer(root: Record<string, unknown>): McpServerInfo {
 }
 
 function normalizeTools(root: Record<string, unknown>): McpToolInfo[] {
-  return asArray(root.tools)
+  const direct = asArray(root.tools);
+  const listResult = asArray(asObject(root.listTools).tools);
+
+  return [...direct, ...listResult]
     .map((entry) => asObject(entry))
     .filter((entry) => typeof entry.name === "string")
     .map((entry) => ({
@@ -66,7 +69,11 @@ function normalizeTools(root: Record<string, unknown>): McpToolInfo[] {
 }
 
 function normalizeResources(root: Record<string, unknown>, key: "resources" | "resourceTemplates"): McpResourceInfo[] {
-  return asArray(root[key]).map((entry) => {
+  const direct = asArray(root[key]);
+  const legacyKey = key === "resourceTemplates" ? "listResourceTemplates" : "listResources";
+  const listResult = asArray(asObject(root[legacyKey])[key]);
+
+  return [...direct, ...listResult].map((entry) => {
     const object = asObject(entry);
     return {
       ...object,
@@ -80,7 +87,10 @@ function normalizeResources(root: Record<string, unknown>, key: "resources" | "r
 }
 
 function normalizePrompts(root: Record<string, unknown>): McpPromptInfo[] {
-  return asArray(root.prompts)
+  const direct = asArray(root.prompts);
+  const listResult = asArray(asObject(root.listPrompts).prompts);
+
+  return [...direct, ...listResult]
     .map((entry) => asObject(entry))
     .filter((entry) => typeof entry.name === "string")
     .map((entry) => ({
